@@ -30,9 +30,9 @@
     <div id="loading">กำลังโหลด...</div>
   </div>
   <script>
-    // ใส่ LIFF ID ของคุณเองจาก LINE Developers
+    // ใส่ LIFF ID ของคุณเอง
     const liffId = "2004735926-kK8G6N9G";
-    // ใส่ URL Google Apps Script Web App ที่ Deploy ไว้แล้ว (https://script.google.com/macros/s/....../exec)
+    // ใส่ URL Apps Script Web App ที่ Deploy แล้ว
     const backendURL = "https://script.google.com/macros/s/AKfycbzyvzWNPLZMzaaRbCRHg6oPuBoNT3iEs8ZGQzklBCe_68XOEJUkNXAGiokrcpyaf2ikHw/exec";
 
     function showForm() {
@@ -74,7 +74,7 @@
       .then(res => res.json())
       .then(result => {
         if(result.status === "ok") {
-          document.getElementById('result').innerText = "ลงทะเบียนสำเร็จ: " + result.course + "\n" + result.fullName;
+          document.getElementById('result').innerText = "ลงทะเบียนสำเร็จ: " + result.course + " (" + result.fullName + ")";
         } else {
           document.getElementById('result').innerHTML = '<span class="error">' + (result.message || 'เกิดข้อผิดพลาด') + '</span>';
         }
