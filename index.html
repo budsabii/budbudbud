@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>LIFF Debug</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+</head>
+<body>
+  <h1>LIFF UserID Debug</h1>
+  <button onclick="getUserId()">Get User ID</button>
+  <p id="userIdText"></p>
+  <pre id="debug"></pre>
+  <script>
+    function getUserId() {
+      document.getElementById('debug').innerText = 'เริ่ม getUserId';
+      alert('ก่อน init');
+      try {
+        liff.init({ liffId: "2004735926-kK8G6N9G" })
+          .then(() => {
+            alert('init success');
+            document.getElementById('debug').innerText += '\nLIFF init สำเร็จ';
+            if (liff.isLoggedIn()) {
+              document.getElementById('debug').innerText += '\nล็อกอินแล้ว';
+              liff.getProfile().then(profile => {
+                document.getElementById('userIdText').innerText = 'UserId: ' + profile.userId;
+                document.getElementById('debug').innerText += '\nดึง Profile สำเร็จ';
+              }).catch(err => {
+                document.getElementById('userIdText').innerText = 'getProfile error: ' + err;
+                document.getElementById('debug').innerText += '\ngetProfile error: ' + err;
+              });
+            } else {
+              document.getElementById('debug').innerText += '\nยังไม่ได้ล็อกอิน กำลัง redirect...';
+              liff.login();
+            }
+          })
+          .catch(err => {
+            alert('init error: ' + err);
+            document.getElementById('userIdText').innerText = 'LIFF init error: ' + err;
+            document.getElementById('debug').innerText += '\nLIFF init error: ' + err;
+          });
+      } catch (e) {
+        alert('catch error: ' + e);
+        document.getElementById('debug').innerText += '\nCatch error: ' + e;
+      }
+    }
+  </script>
+</body>
+</html>
