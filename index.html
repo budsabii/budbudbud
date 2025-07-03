@@ -19,10 +19,13 @@
     <form id="registerForm" style="display:none;">
       <input type="hidden" id="userId" name="userId">
       <label>รหัสอบรม:
-        <input type="text" id="code" name="code" required>
+        <input type="text" id="courseCode" name="courseCode" required>
       </label>
       <label>รหัสพนักงาน:
         <input type="text" id="empId" name="empId" required>
+      </label>
+      <label>ชื่อพนักงาน:
+        <input type="text" id="empName" name="empName" required>
       </label>
       <button type="submit">ลงทะเบียน</button>
     </form>
@@ -30,22 +33,18 @@
     <div id="loading">กำลังโหลด...</div>
   </div>
   <script>
-    // ใส่ LIFF ID ของคุณเอง
     const liffId = "2004735926-kK8G6N9G";
-    // ใส่ URL Apps Script Web App ที่ Deploy แล้ว
-    const backendURL = "https://script.google.com/macros/s/AKfycbzyvzWNPLZMzaaRbCRHg6oPuBoNT3iEs8ZGQzklBCe_68XOEJUkNXAGiokrcpyaf2ikHw/exec";
+    const backendURL = "https://script.google.com/macros/s/AKfycbzyvzWNPLZMzaaRbCRHg6oPuBoNT3iEs8ZGQzklBCe_68XOEJUkNXAGiokrcpyaf2ikHw/exec"; // ใส่ Apps Script WebApp URL
 
     function showForm() {
       document.getElementById('registerForm').style.display = 'block';
       document.getElementById('loading').style.display = 'none';
     }
-
     function showLoading(msg) {
       document.getElementById('registerForm').style.display = 'none';
       document.getElementById('loading').innerText = msg;
       document.getElementById('loading').style.display = 'block';
     }
-
     liff.init({ liffId })
       .then(() => liff.getProfile())
       .then(profile => {
@@ -61,11 +60,12 @@
       e.preventDefault();
       showLoading("กำลังบันทึก...");
       const data = {
+        action: "register",
         userId: document.getElementById('userId').value,
-        code: document.getElementById('code').value,
-        empId: document.getElementById('empId').value
+        courseCode: document.getElementById('courseCode').value,
+        empId: document.getElementById('empId').value,
+        empName: document.getElementById('empName').value
       };
-
       fetch(backendURL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -74,7 +74,7 @@
       .then(res => res.json())
       .then(result => {
         if(result.status === "ok") {
-          document.getElementById('result').innerText = "ลงทะเบียนสำเร็จ: " + result.course + " (" + result.fullName + ")";
+          document.getElementById('result').innerText = "ลงทะเบียนสำเร็จ: " + result.course;
         } else {
           document.getElementById('result').innerHTML = '<span class="error">' + (result.message || 'เกิดข้อผิดพลาด') + '</span>';
         }
