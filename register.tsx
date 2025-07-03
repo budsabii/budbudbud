@@ -8,14 +8,14 @@ export default function RegisterPage() {
   const [empId, setEmpId] = useState("");
 
   useEffect(() => {
-    liff.init({ liffId: "YOUR_LIFF_ID" }).then(() => {
+    liff.init({ liffId: "2004735926-kK8G6N9G" }).then(() => {
       if (!liff.isLoggedIn()) liff.login();
       else liff.getProfile().then(setProfile);
     });
   }, []);
 
   const handleRegister = async () => {
-    const res = await fetch("SCRIPT_URL", {
+    const res = await fetch("https://script.google.com/macros/s/AKfycbzyvzWNPLZMzaaRbCRHg6oPuBoNT3iEs8ZGQzklBCe_68XOEJUkNXAGiokrcpyaf2ikHw/exec", {
       method: "POST",
       body: JSON.stringify({
         type: "register",
