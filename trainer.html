@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Trainer Panel</title>
+</head>
+<body>
+  <h2>Trainer Panel</h2>
+  <label>รหัสคอร์ส: <input type="text" id="courseCode"></label>
+  <button onclick="loadList()">โหลดรายชื่อ</button>
+  <ul id="list"></ul>
+  <script>
+    const backendURL = "YOUR_SCRIPT_URL";
+    function loadList() {
+      const code = document.getElementById("courseCode").value;
+      fetch(backendURL, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({action: "listReg", courseCode: code})
+      })
+      .then(res => res.json())
+      .then(data => {
+        const ul = document.getElementById("list");
+        ul.innerHTML = "";
+        if(data.list && data.list.length) {
+          data.list.forEach(item => {
+            ul.innerHTML += `<li>${item.empId} - ${item.empName} (${item.status}) 
+            <button onclick="markEval('${item.userId}','${code}')">mark evaluated</button></li>`;
+          });
+        } else {
+          ul.innerHTML = "<li>ไม่พบข้อมูล</li>";
+        }
+      });
+    }
+    function markEval(userId, code) {
+      fetch(backendURL, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({action: "markEval", userId, courseCode: code})
+      })
+      .then(res => res.json())
+      .then(r => { alert(r.status === "ok" ? "บันทึกแล้ว" : r.message); loadList(); });
+    }
+  </script>
+</body>
+</html>
